@@ -11,7 +11,7 @@ import reviewRoutes from './routes/reviews.js'
 dotenv.config()
 const app = express()
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+app.use(cors({ origin: 'https://freelance-marketplace-l9z9.vercel.app/', credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
 
