@@ -11,7 +11,22 @@ import reviewRoutes from './routes/reviews.js'
 dotenv.config()
 const app = express()
 
-app.use(cors({ origin: 'https://freelance-marketplace-l9z9.vercel.app/', credentials: true }))
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://freelance-marketplace-l9z9.vercel.app'
+]
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+}))
+
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
 
@@ -19,6 +34,10 @@ app.use('/api/auth', authRoutes)
 app.use('/api/gigs', gigRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/reviews', reviewRoutes)
+
+app.get('/', (req, res) => {
+  res.json('Backend is running!')
+})
 
 mongoose
   .connect(process.env.MONGO_URI)
